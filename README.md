@@ -181,4 +181,5 @@ Le pull request sono benvenute! Se vuoi proporre miglioramenti o estensioni, apr
 
 ## 📝 Licenza
 
-Questo progetto è distribuito sotto licenza MIT.
+Questo progetto è rilasciato sotto licenza MIT.  
+Vedi il file [LICENSE](./LICENSE) per i dettagli.
