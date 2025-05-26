@@ -1,0 +1,161 @@
+{
+  "info": {
+    "name": "Smart Energy API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Get All Records",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/energy",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "energy"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Filter by Building Type (Commercial)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/energy/building-type/Commercial",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "energy",
+            "building-type",
+            "Commercial"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Average Consumption",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/energy/average",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "energy",
+            "average"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Average Consumption per Day",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/energy/average-per-day",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "energy",
+            "average-per-day"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Filter by Surface Range (10000-30000)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/energy/surface-range?min=10000&max=30000",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "energy",
+            "surface-range?min=10000&max=30000"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Top 3 Records by Consumption",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/energy/top?limit=3",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "energy",
+            "top?limit=3"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Filter by Temperature Above 25",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/energy/temperature-above/25",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "energy",
+            "temperature-above",
+            "25"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Download CSV",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/energy/export",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "energy",
+            "export"
+          ]
+        }
+      }
+    }
+  ]
+}
