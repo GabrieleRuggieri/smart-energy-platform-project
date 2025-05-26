@@ -20,58 +20,75 @@ public class EnergyController {
 
     @GET
     public List<EnergyRecord> getAllRecords() {
-        Log.info("Richiesta: GET /energy");
-        return service.loadDataFromCsv();
+
+        Log.info("Inizio metodo getAllRecords()");
+
+        return service.getAllFromMemory();
     }
 
     @GET
     @Path("/building-type/{type}")
     public List<EnergyRecord> filterByBuildingType(@PathParam("type") String type) {
-        Log.infof("Richiesta: filtro per buildingType = %s", type);
-        return service.filterByBuildingType(type);
+
+        Log.info("Inizio metodo filterByBuildingType()");
+
+        return service.filterByBuildingTypeFromMemory(type);
     }
 
     @GET
     @Path("/average")
     public double averageConsumption() {
-        Log.info("Richiesta: consumo medio totale");
-        return service.getAverageConsumption();
+
+        Log.info("Inizio metodo averageConsumption()");
+
+        return service.getAverageConsumptionFromMemory();
     }
 
     @GET
     @Path("/average-per-day")
     public Map<String, Double> averagePerDay() {
-        Log.info("Richiesta: media per giorno della settimana");
-        return service.getAverageConsumptionPerDay();
+
+        Log.info("Inizio metodo averagePerDay()");
+
+        return service.getAverageConsumptionPerDayFromMemory();
     }
 
     @GET
     @Path("/surface-range")
     public List<EnergyRecord> surfaceRange(@QueryParam("min") int min, @QueryParam("max") int max) {
-        Log.infof("Richiesta: superficie tra %s e %s", min, max);
-        return service.filterBySurfaceRange(min, max);
+
+        Log.info("Inizio metodo surfaceRange()");
+
+        return service.filterBySurfaceRangeFromMemory(min, max);
     }
 
     @GET
     @Path("/top")
     public List<EnergyRecord> top(@QueryParam("limit") @DefaultValue("5") int limit) {
-        Log.infof("Richiesta: top %s consumi", limit);
-        return service.getTopByConsumption(limit);
+
+        Log.info("Inizio metodo top()");
+
+        return service.getTopByConsumptionFromMemory(limit);
     }
 
     @GET
     @Path("/temperature-above/{value}")
     public List<EnergyRecord> temperatureAbove(@PathParam("value") double value) {
-        Log.infof("Richiesta: temperatura > %s", value);
-        return service.filterByTemperatureAbove(value);
+
+        Log.info("Inizio metodo temperatureAbove()");
+
+        return service.filterByTemperatureAboveFromMemory(value);
     }
 
     @GET
     @Path("/export")
     @Produces("text/csv")
     public Response exportCsv() {
-        Log.info("Richiesta: esportazione CSV");
+
+        Log.info("Inizio metodo exportCsv()");
+
         String csv = service.getRawCsv();
+
         return Response.ok(csv)
                 .header("Content-Disposition", "attachment; filename=\"energy-data.csv\"")
                 .build();
