@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  energy-service:
+    image: energy-service:latest
+    container_name: energy-service
+    build:
+      context: .
+      dockerfile: src/main/docker/Dockerfile.jvm
+    ports:
+      - "8080:8080"
+    environment:
+      - QUARKUS_LOG_LEVEL=INFO
+      - JAVA_OPTS=-Dquarkus.http.port=8080
+    volumes:
+      - ./src/main/resources/data:/work/resources/data:ro
