@@ -33,9 +33,8 @@ Il progetto è organizzato in più microservizi indipendenti, ognuno responsabil
 
 ## 🛠️ Tecnologie Utilizzate
 
-- **Java 17** + **Spring Boot** (con WebFlux dove utile)
+- **Java 17** + **Quarkus**
 - **Apache Kafka** per comunicazione asincrona
-- **PostgreSQL** come database relazionale
 - **Docker** e **Docker Compose** per containerizzazione
 - **Elasticsearch**, **Kibana** per logging avanzato
 - **JUnit 5**, **Mockito** per testing
@@ -59,7 +58,7 @@ smart-energy-platform/
 
 Ogni microservizio include:
 
-- `src/main/java` con Controller, Service, Repository, Model
+- `src/main/java` con Controller, Service, Model
 - `application.yml` con configurazioni di base
 - `pom.xml` con dipendenze specifiche
 - `Dockerfile` per il build containerizzato
@@ -79,7 +78,6 @@ docker-compose up --build
 ```
 
 Avvia i seguenti componenti:
-- PostgreSQL (porta 5432)
 - Kafka + Zookeeper
 - Elasticsearch (porta 9200)
 - Kibana (porta 5601)
@@ -160,22 +158,6 @@ pipeline {
 - I log sono inviati a Elasticsearch
 - Kibana consente la visualizzazione, filtro e analisi
 - Dashboard configurabile su `http://localhost:5601`
-
----
-
-## 🔒 Sicurezza (Opzionale)
-
-Il sistema può essere esteso con:
-
-- **Spring Security + JWT**
-- **Keycloak** per gestione utenti, ruoli e autenticazione centralizzata
-- API Gateway configurabile con filtri di autenticazione/autorizzazione
-
----
-
-## 📬 Contribuzioni
-
-Le pull request sono benvenute! Se vuoi proporre miglioramenti o estensioni, apri una issue o una PR.
 
 ---
 
