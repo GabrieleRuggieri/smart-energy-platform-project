@@ -77,6 +77,14 @@ Ogni microservizio include:
 docker-compose up --build
 ```
 
+```bash
+docker logs -f filebeat
+```
+
+IMPORTANTE
+chmod 644 ./elk/filebeat.yml
+
+
 Avvia i seguenti componenti:
 - Kafka + Zookeeper
 - Elasticsearch (porta 9200)
