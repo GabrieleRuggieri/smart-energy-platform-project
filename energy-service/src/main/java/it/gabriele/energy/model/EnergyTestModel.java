@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class EnergyRecord {
+public class EnergyTestModel {
 
     private String buildingType;
     private int squareFootage;
