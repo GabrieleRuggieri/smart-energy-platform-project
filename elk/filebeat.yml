@@ -1,0 +1,23 @@
+filebeat.inputs:
+  - type: filestream
+    id: energy-service-logs
+    paths:
+      - /var/log/energy-logs.json
+    json.keys_under_root: true
+    json.add_error_key: true
+    multiline.pattern: '^{'
+    multiline.negate: true
+    multiline.match: after
+
+output.logstash:
+  hosts: ["logstash:5044"]
+
+logging:
+  level: info
+  to_stdout: true
+
+setup.kibana:
+  host: "kibana:5601"
+
+setup.dashboards.enabled: true
+setup.template.enabled: true
