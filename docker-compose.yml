@@ -5,11 +5,12 @@ services:
     build:
       context: ./energy-service
       dockerfile: src/main/docker/Dockerfile.jvm
+    user: root
     ports:
       - "8080:8080"
     volumes:
       - ./energy-service/src/main/resources/data:/app/data
-      - log-volume:/var/log
+      - project-logs:/project-logs
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.13.0
@@ -33,17 +34,6 @@ services:
     depends_on:
       - elasticsearch
 
-  logstash:
-    image: docker.elastic.co/logstash/logstash:8.13.0
-    container_name: logstash
-    volumes:
-      - ./elk/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
-      - log-volume:/var/log
-    depends_on:
-      - elasticsearch
-    ports:
-      - "5044:5044"
-
   filebeat:
     image: docker.elastic.co/beats/filebeat:8.13.0
     container_name: filebeat
@@ -51,10 +41,10 @@ services:
     command: ["filebeat", "-e", "--strict.perms=false"]
     volumes:
       - ./elk/filebeat.yml:/usr/share/filebeat/filebeat.yml
-      - log-volume:/var/log
+      - project-logs:/project-logs
     depends_on:
-      - logstash
+      - energy-service
 
 volumes:
   es-data:
-  log-volume:
+  project-logs:
