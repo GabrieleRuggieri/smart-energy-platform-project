@@ -1,0 +1,51 @@
+{
+  "info": {
+    "name": "EnergyBrazilController",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_postman_id": "f1f1e7d2-7f10-4aaf-8d38-d42fecd17a2a"
+  },
+  "item": [
+    {
+      "name": "Start Simulation",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/energy/brazil/start",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "energy",
+            "brazil",
+            "start"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get All Records",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/energy/brazil/records",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "energy",
+            "brazil",
+            "records"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

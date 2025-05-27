@@ -1,0 +1,217 @@
+{
+	"info": {
+		"_postman_id": "e92be87e-50ea-484c-aebd-9e5bd26e3bb3",
+		"name": "Smart Energy - Test Simulation",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34399215"
+	},
+	"item": [
+		{
+			"name": "Start Simulation",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/energy/test/start",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"energy",
+						"test",
+						"start"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Records",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/energy/test/records",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"energy",
+						"test",
+						"records"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Filter by Building Type (Residential)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/energy/test/building-type/Residential",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"energy",
+						"test",
+						"building-type",
+						"Residential"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Average Consumption",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/energy/test/average",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"energy",
+						"test",
+						"average"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Average Consumption Per Day",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/energy/test/average-per-day",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"energy",
+						"test",
+						"average-per-day"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Filter by Surface Range",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/energy/test/surface-range?min=1000&max=30000",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"energy",
+						"test",
+						"surface-range"
+					],
+					"query": [
+						{
+							"key": "min",
+							"value": "1000"
+						},
+						{
+							"key": "max",
+							"value": "30000"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Top Records by Consumption",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/energy/test/top?limit=5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"energy",
+						"test",
+						"top"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Filter by Temperature Above Threshold",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/energy/test/temperature-above/25.0",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"energy",
+						"test",
+						"temperature-above",
+						"25.0"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Export as CSV",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/energy/test/export",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"energy",
+						"test",
+						"export"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
