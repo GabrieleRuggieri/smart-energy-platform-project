@@ -3,6 +3,7 @@ package it.gabriele.energy.service;
 import com.opencsv.CSVReader;
 import io.quarkus.logging.Log;
 import it.gabriele.energy.model.EnergyTestModel;
+import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 
 import java.io.InputStreamReader;
@@ -20,20 +21,27 @@ public class EnergyTestService {
     private static final String CSV_PATH = "/data/test_energy_data.csv";
     private final List<EnergyTestModel> realTimeData = new CopyOnWriteArrayList<>();
 
+    private List<EnergyTestModel> csvData = new ArrayList<>();
+    private int currentIndex = 0;
+
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private final AtomicBoolean isRunning = new AtomicBoolean(false);
 
-//    @PostConstruct
-//    void init() {
-//        realTimeData.addAll(loadDataFromCsv());
-//        Log.info("Lista iniziale con file csv");
-//    }
+    @PostConstruct
+    void init() {
+        csvData = loadDataFromCsv();
+        Log.info("CSV test caricato in memoria");
+    }
 
-//    @Scheduled(every = "30s")
     void simulateSensorData() {
-        EnergyTestModel newRecord = generateRandomRecord();
-        realTimeData.add(newRecord);
-        Log.infof("Nuovo record simulato ricevuto: %s", newRecord);
+        if (currentIndex < csvData.size()) {
+            EnergyTestModel newRecord = csvData.get(currentIndex++);
+            realTimeData.add(newRecord);
+            Log.infof("Nuovo record simulato dal CSV: %s", newRecord);
+        } else {
+            Log.info("Fine del CSV test raggiunta. Simulazione terminata.");
+            scheduler.shutdown();
+        }
     }
 
     public void startScheduledSimulation() {
@@ -45,29 +53,13 @@ public class EnergyTestService {
         }
     }
 
-    private EnergyTestModel generateRandomRecord() {
-        Random rand = new Random();
-        String[] types = {"Residential", "Commercial", "Industrial"};
-        String[] days = {"Weekday", "Weekend"};
-
-        return new EnergyTestModel(
-                types[rand.nextInt(types.length)],
-                1000 + rand.nextInt(50000),
-                1 + rand.nextInt(100),
-                1 + rand.nextInt(50),
-                10.0 + rand.nextDouble() * 25,
-                days[rand.nextInt(days.length)],
-                1000 + rand.nextDouble() * 5000
-        );
-    }
-
-    // 📂 CSV reader
+    // CSV reader
     public List<EnergyTestModel> loadDataFromCsv() {
         List<EnergyTestModel> records = new ArrayList<>();
         try (var reader = new CSVReader(new InputStreamReader(
                 Objects.requireNonNull(getClass().getResourceAsStream(CSV_PATH))))) {
 
-            reader.readNext(); // skip header
+            reader.readNext();
             String[] line;
             while ((line = reader.readNext()) != null) {
                 records.add(new EnergyTestModel(

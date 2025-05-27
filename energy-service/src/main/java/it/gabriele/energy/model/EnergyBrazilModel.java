@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class EnergyBrazilModel {
 
-    private LocalDateTime index;
-    private double hourlyDemand;
+    private LocalDateTime date;
+    private double hourlyEnergyConsumption;
 
 }
