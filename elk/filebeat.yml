@@ -16,8 +16,8 @@ logging:
   level: info
   to_stdout: true
 
-setup.kibana:
-  host: "kibana:5601"
-
-setup.dashboards.enabled: true
-setup.template.enabled: true
+#setup.kibana:
+#  host: "kibana:5601"
+#
+#setup.dashboards.enabled: true
+#setup.template.enabled: true
