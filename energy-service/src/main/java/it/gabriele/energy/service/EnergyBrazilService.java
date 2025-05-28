@@ -2,9 +2,13 @@ package it.gabriele.energy.service;
 
 import com.opencsv.CSVReader;
 import io.quarkus.logging.Log;
+import it.gabriele.alert.model.BrazilAlertEvent;
 import it.gabriele.energy.model.EnergyBrazilModel;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import org.eclipse.microprofile.reactive.messaging.Channel;
+import org.eclipse.microprofile.reactive.messaging.Emitter;
 
 import java.io.InputStreamReader;
 import java.time.LocalDateTime;
@@ -20,6 +24,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @ApplicationScoped
 public class EnergyBrazilService {
+
+    @Inject
+    @Channel("alerts")
+    Emitter<BrazilAlertEvent> alertEmitter;
 
     private static final String CSV_PATH = "/data/energy_demand_hourly_brazil.csv";
     private final List<EnergyBrazilModel> csvData = new ArrayList<>();
@@ -40,7 +48,18 @@ public class EnergyBrazilService {
         if (currentIndex < csvData.size()) {
             EnergyBrazilModel newRecord = csvData.get(currentIndex++);
             realTimeData.add(newRecord);
+
             Log.infof("Nuovo record simulato: %s", newRecord);
+
+            if (newRecord.getHourlyEnergyConsumption() > 20000) {
+                alertEmitter.send(new BrazilAlertEvent(
+                        "BrazilModel",
+                        newRecord.getDate(),
+                        "Consumo critico sopra 20000",
+                        newRecord.getHourlyEnergyConsumption()
+                ));
+            }
+
         } else {
             Log.info("Fine del CSV raggiunta. Simulazione terminata.");
             scheduler.shutdown();

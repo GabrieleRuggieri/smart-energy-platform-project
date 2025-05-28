@@ -2,11 +2,16 @@ package it.gabriele.energy.service;
 
 import com.opencsv.CSVReader;
 import io.quarkus.logging.Log;
+import it.gabriele.alert.model.TestAlertEvent;
 import it.gabriele.energy.model.EnergyTestModel;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import org.eclipse.microprofile.reactive.messaging.Channel;
+import org.eclipse.microprofile.reactive.messaging.Emitter;
 
 import java.io.InputStreamReader;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Executors;
@@ -17,6 +22,10 @@ import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class EnergyTestService {
+
+    @Inject
+    @Channel("alerts")
+    Emitter<TestAlertEvent> alertEmitter;
 
     private static final String CSV_PATH = "/data/test_energy_data.csv";
     private final List<EnergyTestModel> realTimeData = new CopyOnWriteArrayList<>();
@@ -38,6 +47,29 @@ public class EnergyTestService {
             EnergyTestModel newRecord = csvData.get(currentIndex++);
             realTimeData.add(newRecord);
             Log.infof("Nuovo record simulato dal CSV: %s", newRecord);
+
+            if (newRecord.getAverageTemperature() > 20) {
+                alertEmitter.send(new TestAlertEvent(
+                        "TestModel",
+                        LocalDateTime.now(),
+                        "Temperatura anomala sopra 20°C",
+                        newRecord.getBuildingType(),
+                        newRecord.getAverageTemperature(),
+                        newRecord.getEnergyConsumption()
+                ));
+            }
+
+            if (newRecord.getEnergyConsumption() > 3500) {
+                alertEmitter.send(new TestAlertEvent(
+                        "TestModel",
+                        LocalDateTime.now(),
+                        "Consumo energetico elevato",
+                        newRecord.getBuildingType(),
+                        newRecord.getAverageTemperature(),
+                        newRecord.getEnergyConsumption()
+                ));
+            }
+
         } else {
             Log.info("Fine del CSV test raggiunta. Simulazione terminata.");
             scheduler.shutdown();
