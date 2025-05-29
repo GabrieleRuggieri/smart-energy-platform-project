@@ -11,16 +11,16 @@ import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.eclipse.microprofile.reactive.messaging.Emitter;
 
 import java.io.InputStreamReader;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class EnergyBrazilService {
@@ -32,23 +32,20 @@ public class EnergyBrazilService {
     private static final String CSV_PATH = "/data/energy_demand_hourly_brazil.csv";
     private final List<EnergyBrazilModel> csvData = new ArrayList<>();
     private final List<EnergyBrazilModel> realTimeData = new CopyOnWriteArrayList<>();
-
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private final AtomicBoolean isRunning = new AtomicBoolean(false);
-
     private int currentIndex = 0;
 
     @PostConstruct
     void init() {
         csvData.addAll(loadDataFromCsv());
-        Log.info("Lista iniziale con file csv");
+        Log.info("Lista iniziale con file csv caricata.");
     }
 
-    void simulateHourlyDemand() {
+    public void simulateHourlyDemand() {
         if (currentIndex < csvData.size()) {
             EnergyBrazilModel newRecord = csvData.get(currentIndex++);
             realTimeData.add(newRecord);
-
             Log.infof("Nuovo record simulato: %s", newRecord);
 
             if (newRecord.getHourlyEnergyConsumption() > 20000) {
@@ -59,14 +56,13 @@ public class EnergyBrazilService {
                         newRecord.getHourlyEnergyConsumption()
                 ));
             }
-
         } else {
             Log.info("Fine del CSV raggiunta. Simulazione terminata.");
             scheduler.shutdown();
         }
     }
 
-    public void startHourlyDemandSimulation() {
+    public void startSimulation() {
         if (isRunning.compareAndSet(false, true)) {
             Log.info("Simulazione hourly demand avviata via endpoint");
             scheduler.scheduleAtFixedRate(this::simulateHourlyDemand, 0, 30, TimeUnit.SECONDS);
@@ -75,7 +71,6 @@ public class EnergyBrazilService {
         }
     }
 
-    // CSV reader
     public List<EnergyBrazilModel> loadDataFromCsv() {
         List<EnergyBrazilModel> records = new ArrayList<>();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -83,7 +78,7 @@ public class EnergyBrazilService {
         try (var reader = new CSVReader(new InputStreamReader(
                 Objects.requireNonNull(getClass().getResourceAsStream(CSV_PATH))))) {
 
-            reader.readNext(); // skip header
+            reader.readNext(); // Skip header
             String[] line;
             while ((line = reader.readNext()) != null) {
                 records.add(new EnergyBrazilModel(
@@ -99,13 +94,43 @@ public class EnergyBrazilService {
         return records;
     }
 
-    // ========== METODI DOPPI ==========
-
     public List<EnergyBrazilModel> getAllFromMemory() {
         return new ArrayList<>(realTimeData);
     }
 
-    public List<EnergyBrazilModel> getAllFromCsv() {
-        return loadDataFromCsv();
+    public double getAverageConsumption() {
+        return realTimeData.stream()
+                .mapToDouble(EnergyBrazilModel::getHourlyEnergyConsumption)
+                .average()
+                .orElse(0.0);
+    }
+
+    public EnergyBrazilModel getMaxRecord() {
+        return realTimeData.stream()
+                .max(Comparator.comparingDouble(EnergyBrazilModel::getHourlyEnergyConsumption))
+                .orElse(null);
+    }
+
+    public Map<LocalDate, Double> getDailyTotals() {
+        return realTimeData.stream()
+                .collect(Collectors.groupingBy(
+                        r -> r.getDate().toLocalDate(),
+                        Collectors.summingDouble(EnergyBrazilModel::getHourlyEnergyConsumption)
+                ));
+    }
+
+    public List<EnergyBrazilModel> filterByDateRange(LocalDateTime from, LocalDateTime to) {
+        return realTimeData.stream()
+                .filter(r -> !r.getDate().isBefore(from) && !r.getDate().isAfter(to))
+                .collect(Collectors.toList());
+    }
+
+    public String exportCsv() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("date,hourly_demand\n");
+        for (EnergyBrazilModel r : realTimeData) {
+            sb.append(String.format("%s,%.2f\n", r.getDate(), r.getHourlyEnergyConsumption()));
+        }
+        return sb.toString();
     }
 }
