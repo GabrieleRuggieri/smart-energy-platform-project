@@ -1,8 +1,7 @@
 {
   "info": {
-    "name": "EnergyBrazilController",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_postman_id": "f1f1e7d2-7f10-4aaf-8d38-d42fecd17a2a"
+    "name": "EnergyBrazilService API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
     {
@@ -23,8 +22,7 @@
             "start"
           ]
         }
-      },
-      "response": []
+      }
     },
     {
       "name": "Get All Records",
@@ -32,7 +30,7 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "http://localhost:8080/energy/brazil/records",
+          "raw": "http://localhost:8080/energy/brazil/all",
           "protocol": "http",
           "host": [
             "localhost"
@@ -41,11 +39,120 @@
           "path": [
             "energy",
             "brazil",
-            "records"
+            "all"
           ]
         }
-      },
-      "response": []
+      }
+    },
+    {
+      "name": "Get Average Consumption",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/energy/brazil/average",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "energy",
+            "brazil",
+            "average"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Get Max Record",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/energy/brazil/max",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "energy",
+            "brazil",
+            "max"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Get Total Per Day",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/energy/brazil/total-per-day",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "energy",
+            "brazil",
+            "total-per-day"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Filter by Date Range",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/energy/brazil/between?from=2000-01-01T00:00:00&to=2000-01-01T05:00:00",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "energy",
+            "brazil",
+            "between"
+          ],
+          "query": [
+            {
+              "key": "from",
+              "value": "2000-01-01T00:00:00"
+            },
+            {
+              "key": "to",
+              "value": "2000-01-01T05:00:00"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Export CSV",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/energy/brazil/export",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "energy",
+            "brazil",
+            "export"
+          ]
+        }
+      }
     }
   ]
 }
