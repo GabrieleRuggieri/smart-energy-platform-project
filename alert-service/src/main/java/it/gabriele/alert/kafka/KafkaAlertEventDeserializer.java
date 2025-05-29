@@ -2,6 +2,7 @@ package it.gabriele.alert.kafka;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import it.gabriele.alert.model.BaseAlertEvent;
 import it.gabriele.alert.model.BrazilAlertEvent;
 import it.gabriele.alert.model.TestAlertEvent;
@@ -11,10 +12,11 @@ import java.util.Map;
 
 public class KafkaAlertEventDeserializer implements Deserializer<BaseAlertEvent> {
 
-    private final ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
     @Override
-    public void configure(Map<String, ?> configs, boolean isKey) {}
+    public void configure(Map<String, ?> configs, boolean isKey) {
+    }
 
     @Override
     public BaseAlertEvent deserialize(String topic, byte[] data) {
@@ -36,5 +38,6 @@ public class KafkaAlertEventDeserializer implements Deserializer<BaseAlertEvent>
     }
 
     @Override
-    public void close() {}
+    public void close() {
+    }
 }
