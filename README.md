@@ -1,5 +1,7 @@
 # ⚡ Smart Energy Platform
 
+WORK IN PROGRESS!!!
+
 Smart Energy Platform è un sistema distribuito a microservizi per il monitoraggio e l’analisi in tempo reale dei consumi energetici provenienti da dispositivi smart. Progettato per essere scalabile, modulare e facilmente integrabile, il sistema raccoglie, elabora, memorizza e analizza dati di consumo energetico fornendo alert, logging centralizzato e supporto all’analisi.
 
 ---
