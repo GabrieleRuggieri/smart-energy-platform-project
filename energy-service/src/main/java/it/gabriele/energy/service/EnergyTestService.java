@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 public class EnergyTestService {
 
     @Inject
-    @Channel("alerts")
+    @Channel("test-alerts")
     Emitter<TestAlertEvent> alertEmitter;
 
     private static final String CSV_PATH = "/data/test_energy_data.csv";

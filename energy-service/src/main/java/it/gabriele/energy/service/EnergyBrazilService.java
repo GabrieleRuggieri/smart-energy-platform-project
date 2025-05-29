@@ -26,7 +26,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class EnergyBrazilService {
 
     @Inject
-    @Channel("alerts")
+    @Channel("brazil-alerts")
     Emitter<BrazilAlertEvent> alertEmitter;
 
     private static final String CSV_PATH = "/data/energy_demand_hourly_brazil.csv";
