@@ -9,6 +9,8 @@ filebeat.inputs:
     multiline.negate: true
     multiline.match: after
 
+setup.ilm.enabled: false  # disattiva l’Index Lifecycle Management (ILM) in Filebeat
+
 output.elasticsearch:
   hosts: ["http://elasticsearch:9200"]
   index: "energy-logs-%{+yyyy.MM.dd}"
