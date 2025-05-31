@@ -24,13 +24,14 @@ Il progetto è organizzato in più microservizi indipendenti, ognuno responsabil
 
 ### Microservizi
 
-| Microservizio      | Responsabilità principale                                 |
-|--------------------|------------------------------------------------------------|
-| `energy-service`   | Raccolta e analisi dei dati energetici da CSV              |
-| `alert-service`    | Generazione alert in base a soglie di consumo              |
-| `analytics-service`| Aggregazione e visualizzazione metrica dei consumi         |
-| `logging-service`  | Logging centralizzato tramite Filebeat + Elasticsearch     |
-| `gateway-service`  | (In futuro) API Gateway per orchestrazione delle richieste |
+| Microservizio         | Responsabilità principale                                  |
+|-----------------------|------------------------------------------------------------|
+| `energy-service`      | Raccolta e analisi dei dati energetici da CSV              |
+| `ai-predictor-service`  | Predizione consumi futuri tramite modello ML e invio alert |
+| `alert-service`       | Generazione alert in base a soglie di consumo              |
+| `analytics-service`   | Aggregazione e visualizzazione metrica dei consumi         |
+| `logging-service`     | Logging centralizzato tramite Filebeat + Elasticsearch     |
+| `gateway-service`     | (In futuro) API Gateway per orchestrazione delle richieste |
 
 ---
 
@@ -45,6 +46,7 @@ Il progetto è organizzato in più microservizi indipendenti, ognuno responsabil
 - **SonarQube** per analisi della qualità del codice
 - **Grafana** per la visualizzazione delle metriche
 - **Postman** per test delle API
+- **Smile** per regressione lineare ML
 
 ---
 

@@ -100,6 +100,20 @@ services:
     depends_on:
       - elasticsearch
 
+  ai-predictor-service:
+    image: ai-predictor-service:latest
+    container_name: ai-predictor-service
+    build:
+      context: ./ai-predictor-service
+      dockerfile: src/main/docker/Dockerfile.jvm
+    ports:
+      - "8082:8080"
+    volumes:
+      - ./ai-predictor-service/src/main/resources/data:/app/data
+    depends_on:
+      kafka:
+        condition: service_healthy
+
 volumes:
   es-data:
   project-logs:
