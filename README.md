@@ -14,6 +14,7 @@ Smart Energy Platform è un sistema distribuito a microservizi per il monitoragg
 - CI/CD automatizzata con Jenkins e SonarQube.
 - Analisi e aggregazione dei consumi tramite Kafka ed Elasticsearch.
 - Visualizzazione dei log e delle metriche via Kibana e Grafana.
+- Supporto a simulazioni tramite file CSV.
 
 ---
 
@@ -23,25 +24,27 @@ Il progetto è organizzato in più microservizi indipendenti, ognuno responsabil
 
 ### Microservizi
 
-| Microservizio         | Descrizione |
-|------------------------|-------------|
-| **gateway-service**    | API Gateway centralizzato per routing, rate limiting e sicurezza. |
-| **energy-service**     | Ingestione e persistenza dei dati di consumo energetico. |
-| **alert-service**      | Generazione di alert in base a soglie e regole personalizzate. |
-| **analytics-service**  | Analisi storica e aggregata dei dati di consumo. |
-| **logging-service**    | Raccolta e centralizzazione dei log strutturati tramite ELK stack. |
+| Microservizio      | Responsabilità principale                                 |
+|--------------------|------------------------------------------------------------|
+| `energy-service`   | Raccolta e analisi dei dati energetici da CSV              |
+| `alert-service`    | Generazione alert in base a soglie di consumo              |
+| `analytics-service`| Aggregazione e visualizzazione metrica dei consumi         |
+| `logging-service`  | Logging centralizzato tramite Filebeat + Elasticsearch     |
+| `gateway-service`  | (In futuro) API Gateway per orchestrazione delle richieste |
 
 ---
 
 ## 🛠️ Tecnologie Utilizzate
 
 - **Java 17** + **Quarkus**
-- **Apache Kafka** per comunicazione asincrona
+- **Kafka** per comunicazione asincrona
 - **Docker** e **Docker Compose** per containerizzazione
 - **Elasticsearch**, **Kibana** per logging avanzato
 - **JUnit 5**, **Mockito** per testing
 - **Jenkins** per CI/CD
 - **SonarQube** per analisi della qualità del codice
+- **Grafana** per la visualizzazione delle metriche
+- **Postman** per test delle API
 
 ---
 
