@@ -71,10 +71,16 @@
             <version>2.6.0</version>
         </dependency>
         <!-- I/O, DataFrame, parsing CSV, Formula -->
+<!--        <dependency>-->
+<!--            <groupId>com.github.haifengl</groupId>-->
+<!--            <artifactId>smile-data</artifactId>-->
+<!--            <version>2.6.0</version>-->
+<!--        </dependency>-->
+        <!-- Questo include codice + librerie native (Linux, Windows, macOS) -->
         <dependency>
-            <groupId>com.github.haifengl</groupId>
-            <artifactId>smile-data</artifactId>
-            <version>2.6.0</version>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>openblas-platform</artifactId>
+            <version>0.3.26-1.5.10</version>
         </dependency>
     </dependencies>
 

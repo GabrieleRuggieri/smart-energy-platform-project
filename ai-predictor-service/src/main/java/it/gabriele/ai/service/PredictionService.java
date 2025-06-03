@@ -54,8 +54,11 @@ public class PredictionService {
                     DoubleVector.of("hourly_demand", demand)
             );
 
+//            model = OLS.fit(Formula.of("hourly_demand", "timestamp"), training);
             model = OLS.fit(Formula.lhs("hourly_demand"), training);
-            Log.infof("Modello addestrato con successo su %d record.", demand.length);
+
+            Log.info("Modello addestrato. Hash: " + model.hashCode());
+            Log.info("Numero coefficienti nel modello: " + model.coefficients().length);
 
         } catch (Exception e) {
             Log.error("Errore durante il training del modello AI", e);
@@ -80,8 +83,19 @@ public class PredictionService {
     }
 
     public PredictionResult predict(LocalDateTime dateTime) {
+
+        if (model == null) {
+            throw new IllegalStateException("Modello non inizializzato");
+        }
+
         double timestamp = dateTime.atZone(java.time.ZoneId.systemDefault()).toEpochSecond();
-        double predicted = model.predict(new double[]{timestamp});
+        double[] input = new double[]{1.0, timestamp};
+
+        Log.info("Uso modello per predizione. Hash: " + model.hashCode());
+        Log.info("Coefficienti del modello: " + Arrays.toString(model.coefficients()));
+        Log.info("Input passato a predict: " + Arrays.toString(input));
+
+        double predicted = model.predict(input);
 
         boolean alert = predicted > ALERT_THRESHOLD;
 
