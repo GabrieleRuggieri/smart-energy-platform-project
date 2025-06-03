@@ -1,0 +1,95 @@
+{
+  "info": {
+    "_postman_id": "ai-lstm-energy-api-v2",
+    "name": "AI LSTM Energy Prediction API v2",
+    "description": "Collection per testare l'API di previsione consumo energetico con LSTM (versione datetime)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/health",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "health"
+          ]
+        },
+        "description": "Controlla lo stato di salute dell'API"
+      }
+    },
+    {
+      "name": "API Root Info",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            ""
+          ]
+        },
+        "description": "Ottiene informazioni generali sull'API e sugli endpoint"
+      }
+    },
+    {
+      "name": "Model Info",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/model/info",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "model",
+            "info"
+          ]
+        },
+        "description": "Recupera informazioni sul modello LSTM"
+      }
+    },
+    {
+      "name": "Predict - By Datetime",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"datetimes\": [\n        \"2025-06-04T14:00:00\",\n        \"2025-06-04T15:00:00\",\n        \"2025-06-05T01:00:00\"\n    ]\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/predict",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "predict"
+          ]
+        },
+        "description": "Predice il consumo energetico per una o pi\u00f9 date/ore (formato ISO)"
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string"
+    }
+  ]
+}
