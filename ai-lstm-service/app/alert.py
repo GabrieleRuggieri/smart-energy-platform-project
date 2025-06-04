@@ -1,11 +1,25 @@
-import requests
+from confluent_kafka import Producer
+import json
+from datetime import datetime
 
-ALERT_SERVICE_URL = "http://alert-service:8081/alerts"
+KAFKA_BOOTSTRAP_SERVERS = 'kafka:9092'
+TOPIC = 'alert-events'
 
-def send_alert(prediction: float):
-    payload = {"message": f"Predicted demand: {prediction}"}
-    try:
-        response = requests.post(ALERT_SERVICE_URL, json=payload)
-        response.raise_for_status()
-    except Exception as e:
-        print(f"❌ Errore nell'invio alert: {e}")
+producer = Producer({'bootstrap.servers': KAFKA_BOOTSTRAP_SERVERS})
+
+def send_lstm_alerts(predictions: list[float], datetimes: list[str]):
+    for prediction, dt in zip(predictions, datetimes):
+        event = {
+            "source": "AI-LSTM-SERVICE",
+            "timestamp": dt,  # previsioni in avanti → timestamp futuro
+            "message": f"Predicted demand at {dt} = {prediction}",
+            "hourlyEnergyConsumption": prediction
+        }
+
+        try:
+            producer.produce(TOPIC, key="alert", value=json.dumps(event))
+            print(f"✅ Alert inviato: {event}")
+        except Exception as e:
+            print(f"❌ Errore nell'invio alert: {e}")
+
+    producer.flush()

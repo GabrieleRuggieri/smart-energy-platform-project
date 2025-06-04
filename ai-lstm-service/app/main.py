@@ -4,7 +4,7 @@ from typing import List, Optional
 import uvicorn
 from app.model import load_model_and_predict_for_datetimes, get_model_info
 from app.training import train_model_if_needed
-from app.alert import send_alert
+from app.alert import send_lstm_alerts
 from datetime import datetime
 
 app = FastAPI(
@@ -46,11 +46,26 @@ async def startup_event():
 async def predict_demand(request: PredictRequest):
     try:
         predictions = load_model_and_predict_for_datetimes(request.datetimes)
-        send_alert(predictions[0])  # opzionale
+
+        # Filtro: solo le previsioni > 20000
+        alert_candidates = [
+            (pred, dt)
+            for pred, dt in zip(predictions, request.datetimes)
+            if pred > 20000.0
+        ]
+
+        if alert_candidates:
+            preds, dts = zip(*alert_candidates)
+            print(f"📢 Inviando {len(preds)} alert sopra soglia a Kafka...")
+            send_lstm_alerts(list(preds), list(dts))
+        else:
+            print("✅ Tutti i consumi previsti sono sotto soglia. Nessun alert inviato.")
+
         return PredictResponse(
             predictions=predictions,
             requested_datetimes=request.datetimes
         )
+
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 

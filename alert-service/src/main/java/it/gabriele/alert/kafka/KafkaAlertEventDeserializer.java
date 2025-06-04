@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import it.gabriele.alert.model.BaseAlertEvent;
 import it.gabriele.alert.model.BrazilAlertEvent;
+import it.gabriele.alert.model.LstmAlertEvent;
 import it.gabriele.alert.model.TestAlertEvent;
 import org.apache.kafka.common.serialization.Deserializer;
 
@@ -28,6 +29,10 @@ public class KafkaAlertEventDeserializer implements Deserializer<BaseAlertEvent>
                 return mapper.treeToValue(tree, BrazilAlertEvent.class);
             } else if ("TestModel".equalsIgnoreCase(source)) {
                 return mapper.treeToValue(tree, TestAlertEvent.class);
+
+            } else if ("AI-LSTM-SERVICE".equalsIgnoreCase(source)) {
+                return mapper.treeToValue(tree, LstmAlertEvent.class);
+
             } else {
                 throw new IllegalArgumentException("Unknown source type: " + source);
             }

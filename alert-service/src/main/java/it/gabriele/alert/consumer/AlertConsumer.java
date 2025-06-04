@@ -19,7 +19,7 @@ public class AlertConsumer {
     @Incoming("alerts")
     @Blocking
     public void receive(BaseAlertEvent alert) {
-        Log.infof("Received alert from {%s}: {%s}", alert.source, alert.message);
+        Log.info("🟢 ALERT RICEVUTO da " + alert.getSource() + ": " + alert.getMessage());
         alertService.handle(alert);
     }
 }
