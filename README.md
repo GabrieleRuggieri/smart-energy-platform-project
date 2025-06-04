@@ -1,182 +1,133 @@
 # ⚡ Smart Energy Platform
 
-WORK IN PROGRESS!!!
-
-Smart Energy Platform è un sistema distribuito a microservizi per il monitoraggio e l’analisi in tempo reale dei consumi energetici provenienti da dispositivi smart. Progettato per essere scalabile, modulare e facilmente integrabile, il sistema raccoglie, elabora, memorizza e analizza dati di consumo energetico fornendo alert, logging centralizzato e supporto all’analisi.
+La **Smart Energy Platform** è una soluzione distribuita modulare per il monitoraggio, l’analisi e la predizione dei consumi energetici. Utilizza una combinazione di microservizi, tecnologie di streaming, machine learning e strumenti di osservabilità per fornire insight real-time e forecast affidabili, scalabili e integrabili.
 
 ---
 
-## 🚀 Obiettivi del Progetto
+## 🧩 Architettura
 
-- Monitoraggio in tempo reale dei consumi energetici.
-- Architettura a microservizi per scalabilità e manutenibilità.
-- Logging centralizzato e sistema di allerta per consumi anomali.
-- CI/CD automatizzata con Jenkins e SonarQube.
-- Analisi e aggregazione dei consumi tramite Kafka ed Elasticsearch.
-- Visualizzazione dei log e delle metriche via Kibana e Grafana.
-- Supporto a simulazioni tramite file CSV.
+La piattaforma è composta da diversi microservizi containerizzati, ciascuno con un ruolo specifico, orchestrati tramite Docker Compose:
 
----
-
-## 🧱 Architettura
-
-Il progetto è organizzato in più microservizi indipendenti, ognuno responsabile di un dominio specifico.
-
-### Microservizi
-
-| Microservizio         | Responsabilità principale                                  |
-|-----------------------|------------------------------------------------------------|
-| `energy-service`      | Raccolta e analisi dei dati energetici da CSV              |
-| `ai-predictor-service`  | Predizione consumi futuri tramite modello ML e invio alert |
-| `alert-service`       | Generazione alert in base a soglie di consumo              |
-| `analytics-service`   | Aggregazione e visualizzazione metrica dei consumi         |
-| `logging-service`     | Logging centralizzato tramite Filebeat + Elasticsearch     |
-| `gateway-service`     | (In futuro) API Gateway per orchestrazione delle richieste |
-
----
-
-## 🛠️ Tecnologie Utilizzate
-
-- **Java 17** + **Quarkus**
-- **Kafka** per comunicazione asincrona
-- **Docker** e **Docker Compose** per containerizzazione
-- **Elasticsearch**, **Kibana** per logging avanzato
-- **JUnit 5**, **Mockito** per testing
-- **Jenkins** per CI/CD
-- **SonarQube** per analisi della qualità del codice
-- **Grafana** per la visualizzazione delle metriche
-- **Postman** per test delle API
-- **Smile** per regressione lineare ML
-
----
-
-## 📦 Struttura del Repository
-
-```
-smart-energy-platform/
-├── gateway-service/
-├── energy-service/
-├── alert-service/
-├── analytics-service/
-├── logging-service/
-├── docker-compose.yml
-└── README.md
+```plaintext
++-------------------+        +------------------+       +-----------------+
+|   energy-service  +-------> Kafka Topics <----+ alert-service         |
++-------------------+        +------------------+       +-----------------+
+         |                                                        |
+         v                                                        v
+ Grafana/Kibana                                           ai-lstm-service
+(Visualizzazione)                                          (Predizione ML)
 ```
 
-Ogni microservizio include:
+---
 
-- `src/main/java` con Controller, Service, Model
-- `application.yml` con configurazioni di base
-- `pom.xml` con dipendenze specifiche
-- `Dockerfile` per il build containerizzato
-- `Jenkinsfile` per pipeline CI/CD
-- Test unitari e/o d'integrazione
+## 🧱 Microservizi
+
+| Servizio              | Linguaggio | Ruolo |
+|-----------------------|------------|-------|
+| `energy-service`      | Java (Quarkus) | Espone API per interrogare i dati energetici (CSV) |
+| `alert-service`       | Java (Quarkus) | Genera e consuma eventi di allerta da Kafka |
+| `ai-lstm-service`     | Python (FastAPI) | Predice i consumi futuri con modelli LSTM addestrati |
+| `ai-predictor-service`| Java (Quarkus) | Versione legacy del servizio predittivo (da dismettere) |
+| `elasticsearch`       | - | Archiviazione dei log e dati per Kibana |
+| `kibana`              | - | Dashboard e analisi log |
+| `grafana`             | - | Dashboard metrica dei consumi |
+| `filebeat`            | - | Forwarding dei log verso Elasticsearch |
+| `kafka`               | - | Broker eventi per allerta, predizioni, consumi |
+| `sonarqube`           | - | Analisi statica del codice, test coverage |
 
 ---
 
-## 🐳 Avvio Locale
+## 🚀 Avvio rapido
 
-> È necessario avere installato: Docker, Docker Compose e Maven.
+Assicurati di avere installato:
 
-### 1. Avvio dei servizi esterni
+- Docker
+- Docker Compose
+- Java 17+
+- Maven
+
+### ▶️ Esecuzione
 
 ```bash
 docker-compose up --build
 ```
 
+### 🔍 Servizi accessibili
+
+| Servizio     | URL                       | Note                |
+|--------------|---------------------------|---------------------|
+| Grafana      | http://localhost:3000     | admin / admin       |
+| Kibana       | http://localhost:5601     |                     |
+| SonarQube    | http://localhost:9000     | token personale     |
+| Energy API   | http://localhost:8080     | Documentazione API  |
+| Alert API    | http://localhost:8081     | Kafka integration   |
+| LSTM API     | http://localhost:8000     | `/predict` endpoint |
+
+---
+
+## ✅ Testing & Quality
+
+### ✔️ Test Unitari
+
+I test sono implementati nei microservizi Java con JUnit 5 e Mockito.
+
+Per eseguirli:
+
 ```bash
-docker logs -f filebeat
+cd <servizio>
+./mvnw test
 ```
 
-IMPORTANTE
-chmod 644 ./elk/filebeat.yml
+### 📊 Coverage & Analisi Codice
 
-
-Avvia i seguenti componenti:
-- Kafka + Zookeeper
-- Elasticsearch (porta 9200)
-- Kibana (porta 5601)
-
-### 2. Build dei microservizi
+Assicurati che SonarQube sia in esecuzione (`localhost:9000`) poi:
 
 ```bash
-cd energy-service
-mvn clean install
-docker build -t energy-service:latest .
+./mvnw clean verify sonar:sonar \
+  -Dsonar.projectKey=<nome-progetto> \
+  -Dsonar.host.url=http://localhost:9000 \
+  -Dsonar.login=<your-token>
 ```
 
-Ripeti per ciascun microservizio.
+Puoi creare un token da **My Account > Security** in SonarQube.
 
-### 3. Esecuzione manuale
+---
 
-```bash
-docker run -p 8080:8080 energy-service:latest
+## 📦 Dataset Energetico
+
+Il dataset utilizzato per l’addestramento e testing del modello LSTM è basato su dati reali del Brasile, a livello orario, ed è incluso nel path:
+
+```
+ai-lstm-service/app/data/energy_demand_hourly_brazil.csv
 ```
 
 ---
 
-## 🧪 Testing
+## 📈 Visualizzazione
 
-Ogni servizio include test unitari:
+Grafana e Kibana consentono l’analisi visiva di:
 
-```bash
-mvn test
-```
-
-Struttura dei test:
-- JUnit 5 per test unitari
-- Mockito per mock dei componenti
-- Testcontainers (opzionale) per test d’integrazione con DB/Kafka
+- Andamento dei consumi
+- Generazione allerta
+- Log applicativi
+- Anomalie rilevate
 
 ---
 
-## 🔁 Pipeline CI/CD
+## 🛠️ Manutenzione e Deploy
 
-Ogni microservizio include un `Jenkinsfile` che automatizza:
-
-- Build e compilazione
-- Esecuzione dei test
-- Analisi con SonarQube
-- Build dell’immagine Docker
-
-Esempio:
-
-```groovy
-pipeline {
-  agent any
-  stages {
-    stage('Build') {
-      steps { sh 'mvn clean package' }
-    }
-    stage('Test') {
-      steps { sh 'mvn test' }
-    }
-    stage('Sonar') {
-      steps {
-        withSonarQubeEnv('MySonarQube') {
-          sh 'mvn sonar:sonar'
-        }
-      }
-    }
-    stage('Docker') {
-      steps { sh 'docker build -t energy-service:latest .' }
-    }
-  }
-}
-```
+Questa piattaforma può essere facilmente estesa o distribuita in ambiente Kubernetes o cloud-native. Attualmente supporta deploy locale via Docker Compose per semplicità di testing e sviluppo.
 
 ---
 
-## 📈 Logging & Monitoraggio
+## 👨‍💻 Contributi futuri
 
-- I microservizi generano log in formato JSON
-- I log sono inviati a Elasticsearch
-- Kibana consente la visualizzazione, filtro e analisi
-- Dashboard configurabile su `http://localhost:5601`
+- [ ] Aggiunta API Gateway
+- [ ] CI/CD pipeline completa con Jenkins
+- [ ] Interfaccia web frontend (React/Vue)
 
 ---
 
 ## 📝 Licenza
 
-Questo progetto è rilasciato sotto licenza MIT.  
-Vedi il file [LICENSE](./LICENSE) per i dettagli.
+Questo progetto è rilasciato sotto licenza MIT.
