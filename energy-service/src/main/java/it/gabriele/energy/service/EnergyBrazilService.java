@@ -95,7 +95,7 @@ public class EnergyBrazilService {
     }
 
     public List<EnergyBrazilModel> getAllFromMemory() {
-        return new ArrayList<>(realTimeData);
+        return realTimeData;
     }
 
     public double getAverageConsumption() {

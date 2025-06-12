@@ -115,7 +115,7 @@ public class EnergyTestService {
     // ========== METODI DOPPI ==========
 
     public List<EnergyTestModel> getAllFromMemory() {
-        return new ArrayList<>(realTimeData);
+        return realTimeData;
     }
 
     public List<EnergyTestModel> getAllFromCsv() {
